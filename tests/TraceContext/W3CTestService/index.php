@@ -53,8 +53,8 @@ function parseRequestFromGlobals(): RequestInterface
     // Build headers
     $headers = [];
     foreach ($_SERVER as $key => $value) {
-        if (strpos($key, 'HTTP_') === 0) {
-            $headers[substr($key, 5)] = $value;
+        if (strpos((string) $key, 'HTTP_') === 0) {
+            $headers[substr((string) $key, 5)] = $value;
         }
     }
 

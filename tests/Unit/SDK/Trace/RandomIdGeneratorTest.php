@@ -36,7 +36,6 @@ class RandomIdGeneratorTest extends TestCase
         $idGenerator = new RandomIdGenerator();
         $reflection = new \ReflectionClass(RandomIdGenerator::class);
         $method = $reflection->getMethod('fallbackAlgorithm');
-        $method->setAccessible(true);
 
         $traceId = $method->invokeArgs($idGenerator, [$reflection->getConstant('TRACE_ID_HEX_LENGTH')]);
         $this->assertEquals(1, preg_match(SpanContextValidator::VALID_TRACE, (string) $traceId));
