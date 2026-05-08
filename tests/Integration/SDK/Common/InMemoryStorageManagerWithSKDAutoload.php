@@ -20,6 +20,10 @@ use Psr\Log\LoggerInterface;
 
 class InMemoryStorageManagerWithSKDAutoload extends TestCase
 {
+    public function __construct()
+    {
+        parent::__construct(static::class);
+    }
     use TestState;
 
     protected LoggerInterface&MockObject $logger;

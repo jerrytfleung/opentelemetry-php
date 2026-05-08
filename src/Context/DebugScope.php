@@ -35,7 +35,7 @@ final class DebugScope implements ScopeInterface
 
         if (!self::$shutdownHandlerInitialized) {
             self::$shutdownHandlerInitialized = true;
-            register_shutdown_function('register_shutdown_function', static fn () => self::$finalShutdownPhase = true);
+            register_shutdown_function(register_shutdown_function(...), static fn () => self::$finalShutdownPhase = true);
         }
     }
 

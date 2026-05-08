@@ -82,6 +82,6 @@ class ConfigurationResolver implements ConfigurationResolverInterface
 
     private static function isEmpty($value): bool
     {
-        return $value === false || $value === null || $value === '';
+        return in_array($value, [false, null, ''], true);
     }
 }

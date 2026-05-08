@@ -156,7 +156,7 @@ class Configuration
     {
         $variableType = self::getType($variableName);
 
-        if ($variableType !== null && $variableType !== $type && $variableType !== VariableTypes::MIXED) {
+        if (!in_array($variableType, [null, $type, VariableTypes::MIXED], true)) {
             throw new UnexpectedValueException(
                 sprintf('Variable "%s" is not supposed to be of type "%s" but type "%s"', $variableName, $type, $variableType)
             );
