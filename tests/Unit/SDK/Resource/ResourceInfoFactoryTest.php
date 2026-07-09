@@ -143,6 +143,36 @@ class ResourceInfoFactoryTest extends TestCase
         ResourceInfoFactory::defaultResource();
     }
 
+    public function test_resource_service_name_from_env_takes_precedence_over_registry_detector_with_all_detectors(): void
+    {
+        $this->setEnvironmentVariable('OTEL_PHP_DETECTORS', 'all');
+        $this->setEnvironmentVariable('OTEL_SERVICE_NAME', 'from-env');
+        $detector = $this->createMock(ResourceDetectorInterface::class);
+        $detector->method('getResource')->willReturn(ResourceInfo::create(Attributes::create([
+            ResourceAttributes::SERVICE_NAME => 'from-registry',
+        ])));
+
+        Registry::registerResourceDetector('foo', $detector);
+        $resource = ResourceInfoFactory::defaultResource();
+
+        $this->assertSame('from-env', $resource->getAttributes()->get(ResourceAttributes::SERVICE_NAME));
+    }
+
+    public function test_resource_service_name_from_env_takes_precedence_over_registry_detector_with_explicit_detector(): void
+    {
+        $this->setEnvironmentVariable('OTEL_PHP_DETECTORS', 'foo');
+        $this->setEnvironmentVariable('OTEL_SERVICE_NAME', 'from-env');
+        $detector = $this->createMock(ResourceDetectorInterface::class);
+        $detector->method('getResource')->willReturn(ResourceInfo::create(Attributes::create([
+            ResourceAttributes::SERVICE_NAME => 'from-registry',
+        ])));
+
+        Registry::registerResourceDetector('foo', $detector);
+        $resource = ResourceInfoFactory::defaultResource();
+
+        $this->assertSame('from-env', $resource->getAttributes()->get(ResourceAttributes::SERVICE_NAME));
+    }
+
     public function test_composite_default_with_extra_resource_from_registry(): void
     {
         $this->setEnvironmentVariable('OTEL_PHP_DETECTORS', 'foo,env');
